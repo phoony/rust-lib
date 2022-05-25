@@ -172,9 +172,9 @@ impl<T> Grid<T> {
     }
 
     pub fn set(&mut self, x: isize, y: isize, item: T) {
+        self.update_boundaries(x, y);
         self.assert_size(x);
         self.assert_existence(x);
-        self.update_boundaries(x, y);
 
         if x >= 0 {
             self.positive[x as usize].as_mut().unwrap().set(y, item);
@@ -188,18 +188,19 @@ impl<T> Grid<T> {
 
     pub fn get(&self, x: isize, y: isize) -> Option<&T> {
         match self.existence(x) {
-            Existence::Positive => self.positive[x as usize].as_ref().unwrap().get(y),
-            Existence::Negative => self.negative[x.abs() as usize - 1].as_ref().unwrap().get(y),
+            Existence::Positive => self.positive.get(x as usize)?.as_ref()?.get(y),
+            Existence::Negative => self.negative.get(x.abs() as usize - 1)?.as_ref()?.get(y),
             Existence::Nonexistent => None,
         }
     }
 
     pub fn get_mut(&mut self, x: isize, y: isize) -> Option<&mut T> {
         match self.existence(x) {
-            Existence::Positive => self.positive[x as usize].as_mut().unwrap().get_mut(y),
-            Existence::Negative => self.negative[x.abs() as usize - 1]
-                .as_mut()
-                .unwrap()
+            Existence::Positive => self.positive.get_mut(x as usize)?.as_mut()?.get_mut(y),
+            Existence::Negative => self
+                .negative
+                .get_mut(x.abs() as usize - 1)?
+                .as_mut()?
                 .get_mut(y),
             Existence::Nonexistent => None,
         }
