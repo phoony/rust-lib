@@ -34,7 +34,7 @@ trait NegativeIndexed<U: Default> {
     fn push_negative(&mut self, item: U);
 }
 
-#[derive(Debug)]
+#[derive(Clone)]
 struct NegativeIndexVec<T> {
     positive: Vec<Option<T>>,
     negative: Vec<Option<T>>,
@@ -93,7 +93,7 @@ impl<T> NegativeIndexVec<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Clone)]
 pub struct Grid<T> {
     positive: Vec<Option<NegativeIndexVec<T>>>,
     negative: Vec<Option<NegativeIndexVec<T>>>,
